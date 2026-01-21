@@ -50,13 +50,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 构建并推送
+      # 构建并推送 - 使用双标签策略
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          # 注意：镜像名称必须全部小写
+          # 使用双标签：latest标签和基于Git SHA的唯一标签
+          # | lower 过滤器确保用户名/组织名全部小写
           tags: |
-            ghcr.io/${{ github.repository_owner }}/ci-cd-practice:latest
-            ghcr.io/${{ github.repository_owner }}/ci-cd-practice:${{ github.sha }}
+            ghcr.io/${{ github.repository_owner | lower }}/ci-cd-practice:latest
+            ghcr.io/${{ github.repository_owner | lower }}/ci-cd-practice:${{ github.sha }}
